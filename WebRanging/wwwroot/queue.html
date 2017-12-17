@@ -33,29 +33,11 @@
         </tr>
         <tr>
             <td width="33%">
-                <table class="table text-center table-dark table-striped table-bordered table-hover">
-                    <tr>
-                        <td>45</td>
-                    </tr>
-                    <tr>
-                        <td>45</td>
-                    </tr>
-                    <tr>
-                        <td>45</td>
-                    </tr>
+                <table class="table text-center table-dark table-striped table-bordered table-hover" id="down">
                 </table>
             </td>
             <td width="33%">
-                <table class="table text-center table-dark table-striped table-bordered table-hover">
-                    <tr>
-                        <td>45</td>
-                    </tr>
-                    <tr>
-                        <td>45</td>
-                    </tr>
-                    <tr>
-                        <td>45</td>
-                    </tr>
+                <table class="table text-center table-dark table-striped table-bordered table-hover" id="analyze">
                 </table>
             </td>
             <td width="33%">
@@ -68,5 +50,30 @@
         </tr>
     </table>
 </center>
+<script>
+    function analyzeAgain(id) {
+        $.post("analyse-again" + id);
+    }
+
+    function makeHD(arr) {
+        let h = "";
+        arr.forEach(a => {
+            h += `<tr>
+                     <td>${a.arguments.url}</td>
+                  </tr>`;
+        });
+        return h;
+    }
+
+    function getList() {
+        $.get('get-queues').then(res => {
+            $("#down").html(makeHD(res.parse));
+            $("#analyze").html(makeHD(res.analyze));
+        });
+    }
+
+    getList();
+    setInterval(getList, 2000)
+</script>
 </body>
 </html>

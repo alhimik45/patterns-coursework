@@ -15,7 +15,6 @@ namespace WebRanging.Queue
         public QueueJobBuilder OfParsing(string url)
         {
             item.JobType = JobType.ParseSite;
-            item.Arguments = item.Arguments ?? new Dictionary<string, string>();
             item.Arguments["url"] = url;
             return this;
         }
@@ -27,16 +26,15 @@ namespace WebRanging.Queue
                 throw new InvalidOperationException("Wrong job type for setting parsing depth");
             }
 
-            item.Arguments = item.Arguments ?? new Dictionary<string, string>();
             item.Arguments["parseDepth"] = depth.ToString();
             return this;
         }
 
-        public QueueJobBuilder OfAnalyze(string siteId)
+        public QueueJobBuilder OfAnalyze(string siteId, string siteUrl)
         {
             item.JobType = JobType.AnalyzeSite;
-            item.Arguments = item.Arguments ?? new Dictionary<string, string>();
             item.Arguments["site"] = siteId;
+            item.Arguments["url"] = siteUrl;
             return this;
         }
 
@@ -48,7 +46,6 @@ namespace WebRanging.Queue
             }
 
             item.JobType = JobType.AnalyzeSite;
-            item.Arguments = item.Arguments ?? new Dictionary<string, string>();
             item.Arguments["forceAnalyze"] = "true";
             return this;
         }

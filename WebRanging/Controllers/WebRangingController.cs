@@ -30,7 +30,9 @@ namespace WebRanging.Controllers
         [Route("analyse-again/{siteId}")]
         public async Task<object> Analyze([FromRoute] string siteId)
         {
-            await queueApi.Add(new QueueJobBuilder().OfAnalyze(siteId).ForceAnalyze().Build());
+            var sites = await sitesApi.GetList();
+            var ss = sites.Single(s => s.Id == siteId);
+            await queueApi.Add(new QueueJobBuilder().OfAnalyze(siteId, ss.Url).ForceAnalyze().Build());
             return true;
         }
 
@@ -40,7 +42,7 @@ namespace WebRanging.Controllers
             var sites = await sitesApi.GetList();
             foreach (var site in sites)
             {
-                await queueApi.Add(new QueueJobBuilder().OfAnalyze(site.Id).ForceAnalyze().Build());
+                await queueApi.Add(new QueueJobBuilder().OfAnalyze(site.Id, site.Url).ForceAnalyze().Build());
             }
 
             return true;

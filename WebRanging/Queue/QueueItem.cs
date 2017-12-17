@@ -11,7 +11,7 @@ namespace WebRanging.Queue
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
         public JobType JobType { get; set; }
-        public Dictionary<string,string> Arguments { get; set; }
+        public Dictionary<string,string> Arguments { get; set; } = new Dictionary<string, string>();
         public DateTime AdditionTime { get; set; } = DateTime.Now;
     }
 }
