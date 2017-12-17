@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ранжирование сайтов</title>
+    <script src="js/jquery-3.2.1.js"></script>
+    <script src="js/bootstrap.bundle.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap-grid.css">
+</head>
+<body background="bg2.jpg">
+<h1 class="text-center text-white">Ранжирование сайтов</h1>
+<div class="text-center">
+    <a href="queue.html">
+        <button class="btn btn-info">Очередь обработки</button>
+    </a>
+    <a href="daemons.html">
+        <button class="btn btn-info">Демоны</button>
+    </a>
+    <button class="btn btn-dark">Проанализировать всё заного</button>
+</div>
+<br/>
+<center>
+    <table class="table text-center table-dark table-striped table-bordered table-hover" style="width: 80%">
+
+        <thead>
+        <tr>
+            <th scope="col" class="after">Адрес сайта</th>
+            <th scope="col">Количество страниц сайта</th>
+            <th scope="col">Количество больших объёмов текста</th>
+            <th scope="col">Количество ссылок на другие сайты</th>
+            <th scope="col">Управление</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row">https://ggole.com</th>
+            <td>45</td>
+            <td>124</td>
+            <td>57</td>
+            <td>
+                <button class="btn btn-dark">Проанализировать заного</button>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td>@fat</td>
+        </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td>Larry</td>
+            <td>the Bird</td>
+            <td>@twitter</td>
+        </tr>
+        </tbody>
+    </table>
+</center>
+</body>
+</html>

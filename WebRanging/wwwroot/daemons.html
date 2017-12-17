@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ранжирование сайтов</title>
+    <script src="js/jquery-3.2.1.js"></script>
+    <script src="js/bootstrap.bundle.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap-grid.css">
+</head>
+<body background="bg2.jpg">
+<h1 class="text-center text-white">Демоны</h1>
+<div class="text-center">
+    <a href="index.html">
+        <button class="btn btn-info">На главную</button>
+    </a>
+    <a href="queue.html">
+        <button class="btn btn-info">Очередь обработки</button>
+    </a>
+</div>
+<br/>
+<center>
+    <div id="accordion" role="tablist" style="width: 90%">
+        <div class="card bg-dark text-white">
+            <div class="card-header" role="tab" id="headingOne">
+                <div class="row">
+                    <div class="col-md-6" style="align-content: left">
+                        <h3>Скачивание</h3>
+                    </div>
+                    <div class="col-md-2">
+                        <h6>Запущено: <span>42</span></h6>
+                    </div>
+                    <div class="col-md-1">
+                        <button class="btn btn-sm btn-info">Запустить ещё</button>
+                    </div>
+                    <div class="col-md-1">
+                        <button class="btn btn-sm btn-info">Остановить 1</button>
+                    </div>
+                    <div class="col-md-2">
+                        <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            <button class="btn btn-sm">Раскрыть список</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne"
+                 data-parent="#accordion">
+                <div class="card-body">
+                    <table class="table text-center table-dark table-striped table-bordered table-hover">
+                        <tr>
+                            <td>98f1103d-ef89-40d9-8181-f70e2f224c11</td>
+                            <td>Анализ http://samlib.com</td>
+                            <td><button class="btn btn-sm">Остановить</button></td>
+                        </tr>
+                        <tr>
+                            <td>98f1103d-ef89-40d9-8181-f70e2f224c11</td>
+                            <td>Ожидает</td>
+                            <td><button class="btn btn-sm">Остановить</button></td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="card bg-dark text-white">
+            <div class="card-header" role="tab" id="headingTwo">
+                <div class="row">
+                    <div class="col-md-6" style="align-content: left">
+                        <h3>Анализ</h3>
+                    </div>
+                    <div class="col-md-2">
+                        <h6>Запущено: <span>42</span></h6>
+                    </div>
+                    <div class="col-md-1">
+                        <button class="btn btn-sm btn-info">Запустить ещё</button>
+                    </div>
+                    <div class="col-md-1">
+                        <button class="btn btn-sm btn-info">Остановить 1</button>
+                    </div>
+                    <div class="col-md-2">
+                        <a data-toggle="collapse" href="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
+                            <button class="btn btn-sm">Раскрыть список</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo"
+                 data-parent="#accordion">
+                <div class="card-body">
+                    <table class="table text-center table-dark table-striped table-bordered table-hover">
+                        <tr>
+                            <td>98f1103d-ef89-40d9-8181-f70e2f224c11</td>
+                            <td>Анализ http://samlib.com</td>
+                            <td><button class="btn btn-sm">Остановить</button></td>
+                        </tr>
+                        <tr>
+                            <td>98f1103d-ef89-40d9-8181-f70e2f224c11</td>
+                            <td>Ожидает</td>
+                            <td><button class="btn btn-sm">Остановить</button></td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</center>
+</body>
+</html>
