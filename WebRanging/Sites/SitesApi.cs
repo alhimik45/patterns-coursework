@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Driver;
+using WebRanging.Daemons.Analyzer;
 
 namespace WebRanging.Sites
 {
@@ -76,7 +77,7 @@ namespace WebRanging.Sites
             return s.ToList();
         }
 
-        public async Task SetSiteParam(string siteId, string paramName, long value)
+        public async Task SetSiteParam(string siteId, WebRageType paramName, long value)
         {
             await sites.UpdateOneAsync(
                 ss => ss.Id == siteId,

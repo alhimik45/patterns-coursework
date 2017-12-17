@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using WebRanging.Daemons.Analyzer;
 
 namespace WebRanging.Sites
 {
@@ -9,6 +10,6 @@ namespace WebRanging.Sites
         Task AddSiteFile(string siteId, string filename, string content);
         IEnumerable<string> GetSiteFiles(string siteId);
         Task<List<Site>> GetList();
-        Task SetSiteParam(string siteId, string paramName, long value);
+        Task SetSiteParam(string siteId, WebRageType paramName, long value);
     }
 }

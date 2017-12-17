@@ -17,7 +17,7 @@
     <a href="daemons.html">
         <button class="btn btn-info">Демоны</button>
     </a>
-    <button class="btn btn-dark">Проанализировать всё заного</button>
+    <button class="btn btn-dark" onclick="analyzeAgain('')">Проанализировать всё заного</button>
 </div>
 <br/>
 <center>
@@ -32,30 +32,35 @@
             <th scope="col">Управление</th>
         </tr>
         </thead>
-        <tbody>
-        <tr>
-            <th scope="row">https://ggole.com</th>
-            <td>45</td>
-            <td>124</td>
-            <td>57</td>
-            <td>
-                <button class="btn btn-dark">Проанализировать заного</button>
-            </td>
-        </tr>
-        <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>@twitter</td>
-        </tr>
+        <tbody id="tb">
         </tbody>
     </table>
 </center>
+<script>
+    function analyzeAgain(id) {
+        $.post("analyse-again"+id);
+    }
+    
+    function getList() {
+        $.get('site-list').then(res => {
+            let h = "";
+            res.forEach(r => {
+                h += `<tr>
+            <th scope="row">${r.url}</th>
+            <td>${r.params["Page"] || "неизвестно"}</td>
+            <td>${r.params["BigText"] || "неизвестно"}</td>
+            <td>${r.params["Links"] || "неизвестно"}</td>
+            <td>
+                <button class="btn btn-dark" onclick="analyzeAgain('/${r.id}')">Проанализировать заного</button>
+            </td>
+        </tr>`
+            });
+            $("#tb").html(h);
+        });
+    }
+    
+    getList()
+    setInterval(getList, 2000)
+</script>
 </body>
 </html>

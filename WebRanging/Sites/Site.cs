@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using WebRanging.Daemons.Analyzer;
 
 namespace WebRanging.Sites
 {
@@ -13,6 +14,6 @@ namespace WebRanging.Sites
 
         public string Url { get; set; }
         public Guid BundleVersion { get; set; }
-        public Dictionary<string, long> Params { get; set; }
+        public Dictionary<WebRageType, long> Params { get; set; } = new Dictionary<WebRageType, long>();
     }
 }
