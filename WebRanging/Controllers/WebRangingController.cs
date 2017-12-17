@@ -68,12 +68,15 @@ namespace WebRanging.Controllers
                     var p = l.Split(",");
                     if (p.Length > 1)
                     {
-                        uint.TryParse(p[1], out n);
+                        if (!uint.TryParse(p[1].Trim(), out n))
+                        {
+                            n = 5;
+                        }
                     }
 
                     return new
                     {
-                        Url = p[0],
+                        Url = p[0].Trim(),
                         Depth = n
                     };
                 }).Select(q =>
@@ -92,21 +95,21 @@ namespace WebRanging.Controllers
                 Analyze = daemonsApi.GetList(DaemonType.Analyzer)
             };
         }
-        
+
         [Route("run-d/{type}")]
         public async Task<object> RunDaemon([FromRoute] DaemonType type)
         {
             daemonsApi.Run(type, 1);
             return true;
         }
-        
+
         [Route("stop-d/{type}")]
         public async Task<object> StopDaemon([FromRoute] DaemonType type)
         {
             await daemonsApi.Stop(type, 1);
             return true;
         }
-        
+
         [Route("stop-name/{id}")]
         public async Task<object> StopDaemonById([FromRoute] Guid id)
         {

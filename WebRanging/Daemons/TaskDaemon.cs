@@ -9,7 +9,7 @@ namespace WebRanging.Daemons
         public Guid Id { get; } = Guid.NewGuid();
         public abstract DaemonType Type { get; }
 
-        protected volatile string status = "Idle";
+        protected volatile string status = DaemonConstants.IdleStatus;
         private CancellationTokenSource cts;
         private Task task;
 
