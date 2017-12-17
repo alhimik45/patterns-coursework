@@ -29,7 +29,7 @@ namespace WebRanging.Daemons
 
         public Task Stop(Guid id)
         {
-            return daemons.TryGetValue(id, out var d) ? d.Stop() : Task.CompletedTask;
+            return daemons.TryRemove(id, out var d) ? d.Stop() : Task.CompletedTask;
         }
 
         public async Task Stop(DaemonType type, int count)
@@ -49,7 +49,7 @@ namespace WebRanging.Daemons
                     return;
                 }
 
-                if (d.Status == "Idle")
+                if (d.Status == DaemonConstants.IdleStatus)
                 {
                     await d.Stop();
                     daemons.Remove(d.Id, out _);
@@ -59,12 +59,17 @@ namespace WebRanging.Daemons
 
             foreach (var daemon in daemons)
             {
+                var d = daemon.Value;
+                if (d.Type != type)
+                {
+                    continue;
+                }
+
                 if (s >= count)
                 {
                     return;
                 }
 
-                var d = daemon.Value;
                 await d.Stop();
                 daemons.Remove(d.Id, out _);
                 ++s;

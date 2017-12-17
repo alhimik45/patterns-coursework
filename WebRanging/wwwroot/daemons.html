@@ -28,13 +28,13 @@
                         <h3>Скачивание</h3>
                     </div>
                     <div class="col-md-2">
-                        <h6>Запущено: <span>42</span></h6>
+                        <h6>Запущено: <span id="parseC">42</span></h6>
                     </div>
                     <div class="col-md-1">
-                        <button class="btn btn-sm btn-info">Запустить ещё</button>
+                        <button class="btn btn-sm btn-info" onclick="runD('Parser')">Запустить ещё</button>
                     </div>
                     <div class="col-md-1">
-                        <button class="btn btn-sm btn-info">Остановить 1</button>
+                        <button class="btn btn-sm btn-info" onclick="stopD('Parser')">Остановить 1</button>
                     </div>
                     <div class="col-md-2">
                         <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -47,17 +47,8 @@
             <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne"
                  data-parent="#accordion">
                 <div class="card-body">
-                    <table class="table text-center table-dark table-striped table-bordered table-hover">
-                        <tr>
-                            <td>98f1103d-ef89-40d9-8181-f70e2f224c11</td>
-                            <td>Анализ http://samlib.com</td>
-                            <td><button class="btn btn-sm">Остановить</button></td>
-                        </tr>
-                        <tr>
-                            <td>98f1103d-ef89-40d9-8181-f70e2f224c11</td>
-                            <td>Ожидает</td>
-                            <td><button class="btn btn-sm">Остановить</button></td>
-                        </tr>
+                    <table class="table text-center table-dark table-striped table-bordered table-hover" id="down">
+
 
                     </table>
                 </div>
@@ -70,13 +61,13 @@
                         <h3>Анализ</h3>
                     </div>
                     <div class="col-md-2">
-                        <h6>Запущено: <span>42</span></h6>
+                        <h6>Запущено: <span id="analyzeC">42</span></h6>
                     </div>
                     <div class="col-md-1">
-                        <button class="btn btn-sm btn-info">Запустить ещё</button>
+                        <button class="btn btn-sm btn-info" onclick="runD('Analyzer')">Запустить ещё</button>
                     </div>
                     <div class="col-md-1">
-                        <button class="btn btn-sm btn-info">Остановить 1</button>
+                        <button class="btn btn-sm btn-info" onclick="stopD('Analyzer')">Остановить 1</button>
                     </div>
                     <div class="col-md-2">
                         <a data-toggle="collapse" href="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
@@ -89,23 +80,50 @@
             <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo"
                  data-parent="#accordion">
                 <div class="card-body">
-                    <table class="table text-center table-dark table-striped table-bordered table-hover">
-                        <tr>
-                            <td>98f1103d-ef89-40d9-8181-f70e2f224c11</td>
-                            <td>Анализ http://samlib.com</td>
-                            <td><button class="btn btn-sm">Остановить</button></td>
-                        </tr>
-                        <tr>
-                            <td>98f1103d-ef89-40d9-8181-f70e2f224c11</td>
-                            <td>Ожидает</td>
-                            <td><button class="btn btn-sm">Остановить</button></td>
-                        </tr>
-
+                    <table class="table text-center table-dark table-striped table-bordered table-hover" id="analyze">
                     </table>
                 </div>
             </div>
         </div>
     </div>
 </center>
+<script>
+    function runD(type) {
+        $.post("/run-d/" + type).then(getList);
+    }
+
+    function stopD(type) {
+        $.post("/stop-d/" + type).then(getList);
+    }
+
+    function stopDN(name) {
+        $.post("/stop-name/" + name).then(getList);
+    }
+
+    function makeH(dd) {
+        let h = "";
+        dd.forEach(d => {
+            h += `<tr>
+                  <td>${d.id}</td>
+                  <td>${d.status}</td>
+                  <td><button class="btn btn-sm" onclick="stopDN('${d.id}')">Остановить</button></td>
+              </tr>`;
+        });
+
+        return h;
+    }
+
+    function getList() {
+        $.get('get-daemons').then(res => {
+            $("#analyzeC").text(res.analyze.length);
+            $("#parseC").text(res.parse.length);
+            $("#down").html(makeH(res.parse));
+            $("#analyze").html(makeH(res.analyze));
+        })
+    }
+
+    setInterval(getList, 2000)
+    getList()
+</script>
 </body>
 </html>

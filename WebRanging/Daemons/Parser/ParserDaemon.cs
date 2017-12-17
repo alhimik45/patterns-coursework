@@ -13,9 +13,9 @@ namespace WebRanging.Daemons.Parser
         {
             Console.WriteLine(Id + " parser" + i++);
             status = "!parser" + i++;
-            await Task.Delay(i, token);
-            status = "Idle";
-            await Task.Delay(i, token);
+            await Task.Delay(i*5000, token);
+            status = DaemonConstants.IdleStatus;
+            await Task.Delay(i*5000, token);
         }
     }
 }

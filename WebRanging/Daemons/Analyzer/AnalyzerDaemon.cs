@@ -13,9 +13,9 @@ namespace WebRanging.Daemons.Analyzer
         {
             Console.WriteLine(Id + " anal" + i++);
             status = "!anal" + i++;
-            await Task.Delay(i*500, token);
+            await Task.Delay(i*5000, token);
             status = "doodly";
-            await Task.Delay(i, token);
+            await Task.Delay(i*5000, token);
         }
     }
 }
