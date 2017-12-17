@@ -20,7 +20,7 @@ namespace WebRanging.Queue
             return this;
         }
 
-        public QueueJobBuilder ParsingDepth(int depth)
+        public QueueJobBuilder ParsingDepth(uint depth)
         {
             if (item.JobType != JobType.ParseSite)
             {

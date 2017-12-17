@@ -9,5 +9,6 @@ namespace WebRanging.Sites
         Task AddSiteFile(string siteId, string filename, string content);
         IEnumerable<string> GetSiteFiles(string siteId);
         Task<List<Site>> GetList();
+        Task SetSiteParam(string siteId, string paramName, long value);
     }
 }

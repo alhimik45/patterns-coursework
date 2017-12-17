@@ -75,5 +75,13 @@ namespace WebRanging.Sites
             var s = await sites.FindAsync(_ => true);
             return s.ToList();
         }
+
+        public async Task SetSiteParam(string siteId, string paramName, long value)
+        {
+            await sites.UpdateOneAsync(
+                ss => ss.Id == siteId,
+                new UpdateDefinitionBuilder<Site>()
+                    .Set(s => s.Params[paramName], value));
+        }
     }
 }

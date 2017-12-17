@@ -59,8 +59,11 @@
                 </table>
             </td>
             <td width="33%">
-                <textarea style="width: 90%; height: 350px;" class="table-dark border-dark"></textarea>
-                <button class="btn btn-info">Добавить</button>
+                <form method="post" action="new-sites">
+                    <textarea name="siteList" style="width: 90%; height: 350px;"
+                              class="table-dark border-dark"></textarea>
+                    <input type="submit" class="btn btn-info" value="Добавить">
+                </form>
             </td>
         </tr>
     </table>

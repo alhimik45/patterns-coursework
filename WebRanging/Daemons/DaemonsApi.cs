@@ -38,12 +38,17 @@ namespace WebRanging.Daemons
             //Удаляем сначала простаивающих демонов
             foreach (var daemon in daemons)
             {
+                var d = daemon.Value;
+                if (d.Type != type)
+                {
+                    continue;
+                }
+
                 if (s >= count)
                 {
                     return;
                 }
 
-                var d = daemon.Value;
                 if (d.Status == "Idle")
                 {
                     await d.Stop();

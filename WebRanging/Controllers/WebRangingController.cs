@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebRanging.Daemons;
 using WebRanging.Queue;
@@ -17,6 +19,97 @@ namespace WebRanging.Controllers
             this.sitesApi = sitesApi;
             this.daemonsApi = daemonsApi;
             this.queueApi = queueApi;
+        }
+
+        [Route("site-list")]
+        public async Task<object> SiteList()
+        {
+            return await sitesApi.GetList();
+        }
+
+        [Route("analyse-again/{siteId}")]
+        public async Task<object> Analyze([FromRoute] string siteId)
+        {
+            await queueApi.Add(new QueueJobBuilder().OfAnalyze(siteId).ForceAnalyze().Build());
+            return true;
+        }
+
+        [Route("analyse-again")]
+        public async Task<object> AnalyzeAll()
+        {
+            var sites = await sitesApi.GetList();
+            foreach (var site in sites)
+            {
+                await queueApi.Add(new QueueJobBuilder().OfAnalyze(site.Id).ForceAnalyze().Build());
+            }
+
+            return true;
+        }
+
+        [Route("get-queues")]
+        public async Task<object> GetQueues()
+        {
+            return new
+            {
+                Parse = await queueApi.GetList(JobType.ParseSite),
+                Analyze = await queueApi.GetList(JobType.AnalyzeSite)
+            };
+        }
+
+        [Route("new-sites")]
+        public async Task<object> NewSites([FromForm] string siteList)
+        {
+            var queries = siteList.Split("\n")
+                .Select(l =>
+                {
+                    uint n = 5;
+                    var p = l.Split(",");
+                    if (p.Length > 1)
+                    {
+                        uint.TryParse(p[1], out n);
+                    }
+
+                    return new
+                    {
+                        Url = p[0],
+                        Depth = n
+                    };
+                }).Select(q =>
+                    queueApi.Add(new QueueJobBuilder().OfParsing(q.Url).ParsingDepth(q.Depth).Build()))
+                .ToArray();
+            await Task.WhenAll(queries);
+            return Redirect("/queue.html");
+        }
+
+        [Route("get-daemons")]
+        public async Task<object> GetDaemons()
+        {
+            return new
+            {
+                Parse = daemonsApi.GetList(DaemonType.Parser),
+                Analyze = daemonsApi.GetList(DaemonType.Analyzer)
+            };
+        }
+        
+        [Route("run-d/{type}")]
+        public async Task<object> RunDaemon([FromRoute] DaemonType type)
+        {
+            daemonsApi.Run(type, 1);
+            return true;
+        }
+        
+        [Route("stop-d/{type}")]
+        public async Task<object> StopDaemon([FromRoute] DaemonType type)
+        {
+            await daemonsApi.Stop(type, 1);
+            return true;
+        }
+        
+        [Route("stop-name/{id}")]
+        public async Task<object> StopDaemonById([FromRoute] Guid id)
+        {
+            await daemonsApi.Stop(id);
+            return true;
         }
     }
 }
