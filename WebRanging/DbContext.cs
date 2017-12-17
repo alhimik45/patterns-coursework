@@ -14,6 +14,10 @@ namespace WebRanging
         public DbContext(string connectionString, string databaseName)
         {
             Database = new MongoClient(connectionString).GetDatabase(databaseName);
+            Sites.Indexes.CreateOneAsync(
+                new IndexKeysDefinitionBuilder<Site>()
+                    .Ascending(site => site.Url),
+                new CreateIndexOptions {Unique = true});
         }
     }
 }

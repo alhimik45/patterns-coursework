@@ -1,6 +1,6 @@
 ﻿namespace WebRanging
 {
-    class ConfigProvider : IConfigProvider
+    public class ConfigProvider : IConfigProvider
     {
         public string StoreSitesFolder { get; }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebRanging.Daemons
 {
-    class DaemonsApi : IDaemonsApi
+    public class DaemonsApi : IDaemonsApi
     {
         private readonly IDaemonFactory daemonFactory;
         private readonly ConcurrentDictionary<Guid, IDaemon> daemons;
