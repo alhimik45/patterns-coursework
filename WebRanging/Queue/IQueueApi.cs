@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace WebRanging.Queue
 {
@@ -6,5 +7,6 @@ namespace WebRanging.Queue
     {
         Task Add(QueueItem item);
         Task<QueueItem> Fetch(JobType jobType);
+        Task<List<QueueItem>> GetList(JobType jobType);
     }
 }

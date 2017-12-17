@@ -6,7 +6,7 @@ namespace WebRanging.Queue
     [JsonConverter(typeof(StringEnumConverter))]
     public enum JobType
     {
-        PARSE_SITE,
-        ANALYZE_SITE
+        ParseSite,
+        AnalyzeSite
     }
 }

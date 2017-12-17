@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MongoDB.Driver;
 
 namespace WebRanging.Queue
@@ -26,6 +27,18 @@ namespace WebRanging.Queue
                     Sort = new SortDefinitionBuilder<QueueItem>()
                         .Ascending(item => item.AdditionTime)
                 });
+        }
+
+        public async Task<List<QueueItem>> GetList(JobType jobType)
+        {
+            var list = await queue.FindAsync(
+                item => item.JobType == jobType,
+                new FindOptions<QueueItem>
+                {
+                    Sort = new SortDefinitionBuilder<QueueItem>()
+                        .Ascending(item => item.AdditionTime)
+                });
+            return list.ToList();
         }
     }
 }
