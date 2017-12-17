@@ -8,7 +8,7 @@ namespace WebRanging.Queue
     {
         private readonly IMongoCollection<QueueItem> queue;
 
-        public QueueApi(DbContext db)
+        public QueueApi(IDbContext db)
         {
             queue = db.Queue;
         }

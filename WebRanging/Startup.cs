@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using WebRanging.Queue;
+using WebRanging.Daemons;
 
 namespace WebRanging
 {
@@ -16,14 +20,25 @@ namespace WebRanging
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             var config = Configuration.Get<Config>();
-
             services.AddMvc();
-            services.AddSingleton(provider =>
+            var builder = new ContainerBuilder();
+            builder.Populate(services);
+
+            builder.RegisterAssemblyTypes(GetType().Assembly)
+                .Where(t => !typeof(Controller).IsAssignableFrom(t))
+                .Where(t => !typeof(IDaemon).IsAssignableFrom(t))
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.Register<IDbContext>(ctx =>
                 new DbContext(config.Mongo.ConnectionString, config.Mongo.DatabaseName));
-            services.AddSingleton<IQueueApi, QueueApi>();
+            builder.Register<IConfigProvider>(ctx =>
+                new ConfigProvider(config.Application.StoreSitesFolder));
+
+            return new AutofacServiceProvider(builder.Build());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
