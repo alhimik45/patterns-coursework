@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WebRanging.Queue;
 
 namespace WebRanging
 {
@@ -22,6 +23,7 @@ namespace WebRanging
             services.AddMvc();
             services.AddSingleton(provider =>
                 new DbContext(config.Mongo.ConnectionString, config.Mongo.DatabaseName));
+            services.AddSingleton<IQueueApi, QueueApi>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
