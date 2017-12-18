@@ -108,9 +108,7 @@ namespace WebRanging.Daemons.Parser
                         : null)
                 .Where(u => u != null && DaemonUtils.IsWebPage(u.ToString()));
             await add;
-            Parallel.ForEach(
-                uris,
-                async u => await Parse(siteId, u, depth + 1, maxDepth, parsed, token));
+            await Task.WhenAll(uris.Select(u => Parse(siteId, u, depth + 1, maxDepth, parsed, token)).ToArray());
         }
     }
 }

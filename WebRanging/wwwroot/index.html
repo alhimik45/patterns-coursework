@@ -29,7 +29,7 @@
             <th scope="col">Количество страниц сайта</th>
             <th scope="col">Количество больших объёмов текста</th>
             <th scope="col">Количество ссылок на другие сайты</th>
-            <!--<th scope="col">Управление</th>-->
+            <th scope="col">Управление</th>
         </tr>
         </thead>
         <tbody id="tb">
@@ -50,9 +50,9 @@
             <td>${r.params["Page"] != null  ? r.params["Page"] : "неизвестно"}</td>
             <td>${r.params["BigText"] != null  ? r.params["BigText"] : "неизвестно"}</td>
             <td>${r.params["Links"] != null  ? r.params["Links"] : "неизвестно"}</td>
-            <!--<td>-->
-                <!--<button class="btn btn-dark" onclick="analyzeAgain('/${r.id}')">Проанализировать заного</button>-->
-            <!--</td>-->
+            <td>
+                <button class="btn btn-dark" onclick="analyzeAgain('/${r.id}')">Проанализировать заного</button>
+            </td>
         </tr>`
             });
             $("#tb").html(h);
