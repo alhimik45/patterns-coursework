@@ -10,6 +10,7 @@ namespace WebRanging.Sites
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public string Id { get; set; }
 
         public string Url { get; set; }

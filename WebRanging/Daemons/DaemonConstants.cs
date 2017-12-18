@@ -2,6 +2,6 @@
 {
     public static class DaemonConstants
     {
-        public static string IdleStatus = "Ожидание";
+        public const string IdleStatus = "Ожидание";
     }
 }

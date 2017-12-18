@@ -1,3 +1,5 @@
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 namespace WebRanging
 {
     public class Config

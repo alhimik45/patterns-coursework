@@ -87,7 +87,7 @@ namespace WebRanging.Controllers
         }
 
         [Route("get-daemons")]
-        public async Task<object> GetDaemons()
+        public object GetDaemons()
         {
             return new
             {
@@ -97,7 +97,7 @@ namespace WebRanging.Controllers
         }
 
         [Route("run-d/{type}")]
-        public async Task<object> RunDaemon([FromRoute] DaemonType type)
+        public object RunDaemon([FromRoute] DaemonType type)
         {
             daemonsApi.Run(type, 1);
             return true;

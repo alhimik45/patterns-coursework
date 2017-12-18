@@ -12,7 +12,7 @@ namespace WebRanging.Daemons.Parser
             try
             {
                 using (var client = new WebClient())
-                using (var stream = client.OpenRead(url))
+                using (var _ = client.OpenRead(url))
                 {
                 }
             }
@@ -30,9 +30,16 @@ namespace WebRanging.Daemons.Parser
             {
                 using (var client = new WebClient())
                 using (var stream = client.OpenRead(uri))
-                using (var textReader = new StreamReader(stream, Encoding.UTF8, true))
                 {
-                    return textReader.ReadToEnd();
+                    if (stream == null)
+                    {
+                        return null;
+                    }
+
+                    using (var textReader = new StreamReader(stream, Encoding.UTF8, true))
+                    {
+                        return textReader.ReadToEnd();
+                    }
                 }
             }
             catch (WebException)
