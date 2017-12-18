@@ -1,4 +1,4 @@
-﻿using System;
+﻿using WebRanging.Sites;
 
 namespace WebRanging.Daemons.Analyzer.Analyzers
 {
@@ -12,7 +12,7 @@ namespace WebRanging.Daemons.Analyzer.Analyzers
         {
         }
 
-        protected override void ProcessFileInternal(Lazy<string> fileContent)
+        protected override void ProcessFileInternal(FileInfo file)
         {
             Value += 1;
         }

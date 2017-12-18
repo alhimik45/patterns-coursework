@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using WebRanging.Sites;
 
 namespace WebRanging.Daemons.Analyzer
 {
@@ -16,11 +17,11 @@ namespace WebRanging.Daemons.Analyzer
             this.succesor = succesor;
         }
 
-        public void ProcessFile(Lazy<string> fileContent, CancellationToken token)
+        public void ProcessFile(FileInfo file, CancellationToken token)
         {
             token.ThrowIfCancellationRequested();
-            ProcessFileInternal(fileContent);
-            succesor?.ProcessFile(fileContent, token);
+            ProcessFileInternal(file);
+            succesor?.ProcessFile(file, token);
         }
 
         public void SaveWebometricsValue(Action<WebRageType, long, int> saveDelegate)
@@ -29,6 +30,6 @@ namespace WebRanging.Daemons.Analyzer
             succesor?.SaveWebometricsValue(saveDelegate);
         }
 
-        protected abstract void ProcessFileInternal(Lazy<string> fileContent);
+        protected abstract void ProcessFileInternal(FileInfo file);
     }
 }

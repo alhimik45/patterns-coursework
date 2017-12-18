@@ -65,12 +65,14 @@ namespace WebRanging.Sites
             File.WriteAllText(Path.Combine(siteDir, Uri.EscapeDataString(filename)), content);
         }
 
-        public IEnumerable<FileInfo> GetSiteFiles(string siteId)
+        public async Task<IEnumerable<FileInfo>> GetSiteFiles(string siteId)
         {
+            var s = (await sites.FindAsync(site => site.Id == siteId)).First();
             var siteDir = Path.Combine(configProvider.StoreSitesFolder, siteId);
             return Directory.EnumerateFiles(siteDir)
                 .Select(path => new FileInfo
                 {
+                    OwnerHost = s.Url,
                     Filename = Uri.UnescapeDataString(path.Replace(siteDir, "")),
                     Content = new Lazy<string>(() => File.ReadAllText(path))
                 });

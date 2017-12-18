@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using WebRanging.Daemons.Analyzer;
 using WebRanging.Queue;
 using WebRanging.Sites;
 
@@ -36,7 +37,7 @@ namespace WebRanging.Daemons.Parser
                 }
 
                 var url = task.Arguments["url"];
-                if (!ParserUtils.IsUrl(url))
+                if (!DaemonUtils.IsUrl(url))
                 {
                     return;
                 }
@@ -91,7 +92,7 @@ namespace WebRanging.Daemons.Parser
             }
 
             parsed[uriHash] = true;
-            var text = ParserUtils.ReadTextFromUrl(uri);
+            var text = DaemonUtils.ReadTextFromUrl(uri);
             if (text == null)
             {
                 return;
@@ -105,7 +106,7 @@ namespace WebRanging.Daemons.Parser
                     : Uri.TryCreate(m, UriKind.Absolute, out var ur) && ur.Host == uri.Host
                         ? ur
                         : null)
-                .Where(u => u != null);
+                .Where(u => u != null && DaemonUtils.IsWebPage(u.ToString()));
             await add;
             Parallel.ForEach(
                 uris,

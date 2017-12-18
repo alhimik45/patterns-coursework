@@ -3,9 +3,9 @@ using System.IO;
 using System.Net;
 using System.Text;
 
-namespace WebRanging.Daemons.Parser
+namespace WebRanging.Daemons.Analyzer
 {
-    public static class ParserUtils
+    public static class DaemonUtils
     {
         public static bool IsUrl(string url)
         {
@@ -50,6 +50,29 @@ namespace WebRanging.Daemons.Parser
             {
                 return null;
             }
+        }
+
+        public static string GetRootDomain(String host)
+        {
+            var domains = host.Split('.');
+
+            if (domains.Length < 3)
+            {
+                return host;
+            }
+
+            var c = domains.Length;
+            if (domains[c - 1].Length < 3 && domains[c - 2].Length <= 3)
+            {
+                return string.Join(".", domains, c - 3, 3);
+            }
+
+            return string.Join(".", domains, c - 2, 2);
+        }
+
+        public static bool IsWebPage(string url)
+        {
+            return !url.EndsWith("zip") || !url.EndsWith("jpg") || !url.EndsWith("png");
         }
     }
 }

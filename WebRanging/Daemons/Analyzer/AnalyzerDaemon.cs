@@ -42,14 +42,14 @@ namespace WebRanging.Daemons.Analyzer
                 var url = task.Arguments["url"];
                 status = $"Анализ {url}";
 
-                var files = sitesApi.GetSiteFiles(siteId);
+                var files = await sitesApi.GetSiteFiles(siteId);
                 try
                 {
                     var analyzerChain = CreateAnalyzerChain();
                     foreach (var file in files)
                     {
                         status = $"Анализ {url}/{file.Filename.TrimStart('/')}";
-                        analyzerChain.ProcessFile(file.Content, token);
+                        analyzerChain.ProcessFile(file, token);
                     }
 
                     analyzerChain.SaveWebometricsValue(

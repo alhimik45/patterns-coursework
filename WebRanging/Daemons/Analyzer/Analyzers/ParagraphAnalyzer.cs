@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using WebRanging.Sites;
 
 namespace WebRanging.Daemons.Analyzer.Analyzers
 {
@@ -17,10 +18,10 @@ namespace WebRanging.Daemons.Analyzer.Analyzers
         {
         }
 
-        protected override void ProcessFileInternal(Lazy<string> fileContent)
+        protected override void ProcessFileInternal(FileInfo file)
         {
             Value += ParagraphRegex
-                .Matches(fileContent.Value)
+                .Matches(file.Content.Value)
                 .Select(m => TagRegex.Replace(m.Captures[0].Value, ""))
                 .Count(s => s.Length > 200);
         }

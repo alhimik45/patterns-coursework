@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using WebRanging.Sites;
 
 namespace WebRanging.Daemons.Analyzer
 {
@@ -8,7 +9,7 @@ namespace WebRanging.Daemons.Analyzer
         WebRageType Type { get; }
         int Weight { get; }
         int ChainWeight { get; }
-        void ProcessFile(Lazy<string> fileContent, CancellationToken token);
+        void ProcessFile(FileInfo file, CancellationToken token);
         void SaveWebometricsValue(Action<WebRageType, long, int> saveDelegate);
     }
 }

@@ -8,7 +8,7 @@ namespace WebRanging.Sites
     {
         Task<string> NewSite(string url);
         Task AddSiteFile(string siteId, string filename, string content);
-        IEnumerable<FileInfo> GetSiteFiles(string siteId);
+        Task<IEnumerable<FileInfo>> GetSiteFiles(string siteId);
         Task<List<Site>> GetList();
         Task SetSiteParam(string siteId, WebRageType paramName, long value, int weight);
         Task UpdateResultWebmetrick(string siteId, int analyzersWeight);
