@@ -87,18 +87,19 @@ namespace WebRanging.Sites
             return s.ToList();
         }
 
-        public async Task SetSiteParam(string siteId, WebRageType paramName, long value)
+        public async Task SetSiteParam(string siteId, WebRageType paramName, long value, int weight)
         {
             await sites.UpdateOneAsync(
                 ss => ss.Id == siteId,
                 new UpdateDefinitionBuilder<Site>()
-                    .Set($"Params.{JsonConvert.SerializeObject(paramName).Trim('"')}", value));
+                    .Set($"Params.{JsonConvert.SerializeObject(paramName).Trim('"')}", value)
+                    .Set($"WeightedParams.{JsonConvert.SerializeObject(paramName).Trim('"')}", value*weight));
         }
 
         public async Task UpdateResultWebmetrick(string siteId, int analyzersWeight)
         {
             var s = (await sites.FindAsync(site => site.Id == siteId)).First();
-            var result = s.Params.Values.Sum() / analyzersWeight;
+            var result = (float)s.WeightedParams.Values.Sum() / analyzersWeight;
             await sites.UpdateOneAsync(
                 ss => ss.Id == siteId,
                 new UpdateDefinitionBuilder<Site>()

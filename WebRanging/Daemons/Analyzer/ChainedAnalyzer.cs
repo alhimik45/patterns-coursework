@@ -23,9 +23,9 @@ namespace WebRanging.Daemons.Analyzer
             succesor?.ProcessFile(fileContent, token);
         }
 
-        public void SaveWebometricsValue(Action<WebRageType, long> saveDelegate)
+        public void SaveWebometricsValue(Action<WebRageType, long, int> saveDelegate)
         {
-            saveDelegate(Type, Value * Weight);
+            saveDelegate(Type, Value, Weight);
             succesor?.SaveWebometricsValue(saveDelegate);
         }
 

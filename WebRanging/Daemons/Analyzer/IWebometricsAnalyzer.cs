@@ -9,6 +9,6 @@ namespace WebRanging.Daemons.Analyzer
         int Weight { get; }
         int ChainWeight { get; }
         void ProcessFile(Lazy<string> fileContent, CancellationToken token);
-        void SaveWebometricsValue(Action<WebRageType, long> saveDelegate);
+        void SaveWebometricsValue(Action<WebRageType, long, int> saveDelegate);
     }
 }

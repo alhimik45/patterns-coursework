@@ -34,7 +34,7 @@ namespace WebRanging.Daemons.Analyzer
                 }
 
                 var siteId = task.Arguments["site"];
-                if (await sitesApi.CheckAnalyzed(siteId))
+                if (await sitesApi.CheckAnalyzed(siteId) && !task.Arguments.ContainsKey("forceAnalyze"))
                 {
                     return;
                 }
@@ -53,7 +53,8 @@ namespace WebRanging.Daemons.Analyzer
                     }
 
                     analyzerChain.SaveWebometricsValue(
-                        async (type, val) => await sitesApi.SetSiteParam(siteId, type, val));
+                        async (type, val, weight) => await sitesApi.SetSiteParam(siteId, type, val, weight));
+                    await sitesApi.UpdateResultWebmetrick(siteId, analyzerChain.ChainWeight);
                 }
                 catch (OperationCanceledException)
                 {
