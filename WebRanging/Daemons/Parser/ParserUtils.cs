@@ -46,6 +46,10 @@ namespace WebRanging.Daemons.Parser
             {
                 return null;
             }
+            catch (IOException)
+            {
+                return null;
+            }
         }
     }
 }

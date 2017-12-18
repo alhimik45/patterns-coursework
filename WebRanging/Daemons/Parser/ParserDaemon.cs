@@ -42,7 +42,7 @@ namespace WebRanging.Daemons.Parser
                 }
 
                 var depthStr = task.Arguments.GetValueOrDefault("parseDepth", "5");
-                if (!int.TryParse(depthStr, out var depth))
+                if (!uint.TryParse(depthStr, out var depth))
                 {
                     depth = 5;
                 }
@@ -50,7 +50,22 @@ namespace WebRanging.Daemons.Parser
                 var uri = new Uri(url);
                 var siteId = await sitesApi.NewSite(uri.Host);
                 status = $"Скачивание {uri.Host}";
-                await Parse(siteId, uri, 0, depth, new ConcurrentDictionary<int, bool>(), token);
+                try
+                {
+                    await Parse(siteId, uri, 0, depth, new ConcurrentDictionary<int, bool>(), token);
+                }
+                catch (OperationCanceledException)
+                {
+                    await queueApi.Add(new QueueJobBuilder().OfParsing(url).ParsingDepth(depth).Build());
+                    throw;
+                }
+
+                if (token.IsCancellationRequested)
+                {
+                    await queueApi.Add(new QueueJobBuilder().OfParsing(url).ParsingDepth(depth).Build());
+                    token.ThrowIfCancellationRequested();
+                }
+
                 await queueApi.Add(new QueueJobBuilder().OfAnalyze(siteId, uri.Host).Build());
                 status = DaemonConstants.IdleStatus;
             }
@@ -61,10 +76,14 @@ namespace WebRanging.Daemons.Parser
             }
         }
 
-        private async Task Parse(string siteId, Uri uri, int depth, int maxDepth,
+        private async Task Parse(string siteId, Uri uri, uint depth, uint maxDepth,
             ConcurrentDictionary<int, bool> parsed, CancellationToken token)
         {
-            token.ThrowIfCancellationRequested();
+            if (token.IsCancellationRequested)
+            {
+                return;
+            }
+
             var uriHash = uri.ToString().GetHashCode();
             if (depth > maxDepth || parsed.GetValueOrDefault(uriHash, false))
             {
@@ -81,15 +100,15 @@ namespace WebRanging.Daemons.Parser
             var add = sitesApi.AddSiteFile(siteId, uri.LocalPath, text);
             var uris = UrlRegex.Matches(text)
                 .Select(m => m.Groups[1].Captures[0].Value)
-                .Select(m => Uri.TryCreate(m, UriKind.Relative, out var u) ? u : null)
-                .Where(u => u != null)
-                .Select(u => new Uri(uri, u.ToString()));
+                .Select(m => Uri.TryCreate(m, UriKind.Relative, out var u)
+                    ? new Uri(uri, u.ToString())
+                    : Uri.TryCreate(m, UriKind.Absolute, out var ur) && ur.Host == uri.Host
+                        ? ur
+                        : null)
+                .Where(u => u != null);
             await add;
-            Parallel.ForEach(uris,
-                new ParallelOptions
-                {
-                    CancellationToken = token
-                },
+            Parallel.ForEach(
+                uris,
                 async u => await Parse(siteId, u, depth + 1, maxDepth, parsed, token));
         }
     }
