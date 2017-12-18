@@ -8,8 +8,11 @@ namespace WebRanging.Sites
     {
         Task<string> NewSite(string url);
         Task AddSiteFile(string siteId, string filename, string content);
-        IEnumerable<string> GetSiteFiles(string siteId);
+        IEnumerable<FileInfo> GetSiteFiles(string siteId);
         Task<List<Site>> GetList();
         Task SetSiteParam(string siteId, WebRageType paramName, long value);
+        Task UpdateResultWebmetrick(string siteId, int analyzersWeight);
+        Task MarkAnalyzed(string siteId);
+        Task<bool> CheckAnalyzed(string siteId);
     }
 }

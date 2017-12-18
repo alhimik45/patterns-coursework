@@ -15,6 +15,8 @@ namespace WebRanging.Sites
 
         public string Url { get; set; }
         public Guid BundleVersion { get; set; }
+        public Guid AnalyzedBundle { get; set; }
+        public long ResultWebMetrick { get; set; }
         public Dictionary<WebRageType, long> Params { get; set; } = new Dictionary<WebRageType, long>();
     }
 }

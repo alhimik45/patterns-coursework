@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using WebRanging.Daemons.Analyzer;
 using WebRanging.Daemons.Parser;
 using WebRanging.Queue;
@@ -10,11 +12,13 @@ namespace WebRanging.Daemons
     {
         private readonly IQueueApi queueApi;
         private readonly ISitesApi sitesApi;
+        private readonly List<IAnalyzerProvider> analyzerProviders;
 
-        public DaemonFactory(IQueueApi queueApi, ISitesApi sitesApi)
+        public DaemonFactory(IQueueApi queueApi, ISitesApi sitesApi, IEnumerable<IAnalyzerProvider> analyzerProviders)
         {
             this.queueApi = queueApi;
             this.sitesApi = sitesApi;
+            this.analyzerProviders = analyzerProviders.ToList();
         }
         
         public IDaemon New(DaemonType type)
@@ -24,7 +28,7 @@ namespace WebRanging.Daemons
                 case DaemonType.Parser:
                     return new ParserDaemon(queueApi, sitesApi);
                 case DaemonType.Analyzer:
-                    return new AnalyzerDaemon();
+                    return new AnalyzerDaemon(queueApi, sitesApi, analyzerProviders);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }

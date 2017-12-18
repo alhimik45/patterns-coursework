@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Driver;
+using Newtonsoft.Json;
 using WebRanging.Daemons.Analyzer;
 
 namespace WebRanging.Sites
@@ -64,16 +65,25 @@ namespace WebRanging.Sites
             File.WriteAllText(Path.Combine(siteDir, Uri.EscapeDataString(filename)), content);
         }
 
-        public IEnumerable<string> GetSiteFiles(string siteId)
+        public IEnumerable<FileInfo> GetSiteFiles(string siteId)
         {
             var siteDir = Path.Combine(configProvider.StoreSitesFolder, siteId);
             return Directory.EnumerateFiles(siteDir)
-                .Select(File.ReadAllText);
+                .Select(path => new FileInfo
+                {
+                    Filename = Uri.UnescapeDataString(path.Replace(siteDir, "")),
+                    Content = new Lazy<string>(() => File.ReadAllText(path))
+                });
         }
 
         public async Task<List<Site>> GetList()
         {
-            var s = await sites.FindAsync(_ => true);
+            var s = await sites.FindAsync(_ => true,
+                new FindOptions<Site>
+                {
+                    Sort = new SortDefinitionBuilder<Site>()
+                        .Descending(site => site.ResultWebMetrick)
+                });
             return s.ToList();
         }
 
@@ -82,7 +92,32 @@ namespace WebRanging.Sites
             await sites.UpdateOneAsync(
                 ss => ss.Id == siteId,
                 new UpdateDefinitionBuilder<Site>()
-                    .Set(s => s.Params[paramName], value));
+                    .Set($"Params.{JsonConvert.SerializeObject(paramName).Trim('"')}", value));
+        }
+
+        public async Task UpdateResultWebmetrick(string siteId, int analyzersWeight)
+        {
+            var s = (await sites.FindAsync(site => site.Id == siteId)).First();
+            var result = s.Params.Values.Sum() / analyzersWeight;
+            await sites.UpdateOneAsync(
+                ss => ss.Id == siteId,
+                new UpdateDefinitionBuilder<Site>()
+                    .Set(ss => ss.ResultWebMetrick, result));
+        }
+
+        public async Task MarkAnalyzed(string siteId)
+        {
+            var s = (await sites.FindAsync(site => site.Id == siteId)).First();
+            await sites.UpdateOneAsync(
+                ss => ss.Id == siteId,
+                new UpdateDefinitionBuilder<Site>()
+                    .Set(ss => ss.AnalyzedBundle, s.BundleVersion));
+        }
+
+        public async Task<bool> CheckAnalyzed(string siteId)
+        {
+            var s = (await sites.FindAsync(site => site.Id == siteId)).First();
+            return s.AnalyzedBundle == s.BundleVersion;
         }
     }
 }

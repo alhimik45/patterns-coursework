@@ -26,7 +26,7 @@
         <thead>
         <tr>
             <th scope="col" class="after">Адрес сайта</th>
-            <th scope="col">Количество страниц сайта</th>
+            <!--<th scope="col">Количество страниц сайта</th>-->
             <th scope="col">Количество больших объёмов текста</th>
             <th scope="col">Количество ссылок на другие сайты</th>
             <th scope="col">Управление</th>
@@ -47,7 +47,7 @@
             res.forEach(r => {
                 h += `<tr>
             <th scope="row">${r.url}</th>
-            <td>${r.params["Page"] || "неизвестно"}</td>
+            <!--<td>${r.params["Page"] || "неизвестно"}</td>-->
             <td>${r.params["BigText"] || "неизвестно"}</td>
             <td>${r.params["Links"] || "неизвестно"}</td>
             <td>

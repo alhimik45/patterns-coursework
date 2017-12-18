@@ -32,6 +32,7 @@ namespace WebRanging.Daemons
         public async Task Stop()
         {
             cts.Cancel();
+            status = DaemonConstants.StoppingStatus;
             try
             {
                 await task;
