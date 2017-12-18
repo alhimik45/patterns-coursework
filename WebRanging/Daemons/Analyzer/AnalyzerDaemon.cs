@@ -48,7 +48,7 @@ namespace WebRanging.Daemons.Analyzer
                     var analyzerChain = CreateAnalyzerChain();
                     foreach (var file in files)
                     {
-                        status = $"Анализ {url}{file.Filename}";
+                        status = $"Анализ {url}/{file.Filename.TrimStart('/')}";
                         analyzerChain.ProcessFile(file.Content, token);
                     }
 

@@ -47,9 +47,9 @@
             res.forEach(r => {
                 h += `<tr>
             <th scope="row">${r.url}</th>
-            <td>${r.params["Page"] || "неизвестно"}</td>
-            <td>${r.params["BigText"] || "неизвестно"}</td>
-            <td>${r.params["Links"] || "неизвестно"}</td>
+            <td>${r.params["Page"] != null  ? r.params["Page"] : "неизвестно"}</td>
+            <td>${r.params["BigText"] != null  ? r.params["BigText"] : "неизвестно"}</td>
+            <td>${r.params["Links"] != null  ? r.params["Links"] : "неизвестно"}</td>
             <td>
                 <button class="btn btn-dark" onclick="analyzeAgain('/${r.id}')">Проанализировать заного</button>
             </td>
