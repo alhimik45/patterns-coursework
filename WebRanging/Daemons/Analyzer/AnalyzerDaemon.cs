@@ -22,17 +22,12 @@ namespace WebRanging.Daemons.Analyzer
             this.analyzerProviders = analyzerProviders;
         }
 
-        protected override async Task ExecuteIteration(CancellationToken token)
+        protected override Task<QueueItem> GetTask() => queueApi.Fetch(JobType.AnalyzeSite);
+
+        protected override async Task ExecuteIteration(QueueItem task, CancellationToken token)
         {
             try
             {
-                var task = await queueApi.Fetch(JobType.AnalyzeSite);
-                while (task == null)
-                {
-                    await Task.Delay(1000, token);
-                    task = await queueApi.Fetch(JobType.AnalyzeSite);
-                }
-
                 var siteId = task.Arguments["site"];
                 if (await sitesApi.CheckAnalyzed(siteId) && !task.Arguments.ContainsKey("forceAnalyze"))
                 {

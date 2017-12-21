@@ -25,17 +25,12 @@ namespace WebRanging.Daemons.Parser
             this.sitesApi = sitesApi;
         }
 
-        protected override async Task ExecuteIteration(CancellationToken token)
+        protected override Task<QueueItem> GetTask() => queueApi.Fetch(JobType.ParseSite);
+
+        protected override async Task ExecuteIteration(QueueItem task, CancellationToken token)
         {
             try
             {
-                var task = await queueApi.Fetch(JobType.ParseSite);
-                while (task == null)
-                {
-                    await Task.Delay(1000, token);
-                    task = await queueApi.Fetch(JobType.ParseSite);
-                }
-
                 var url = task.Arguments["url"];
                 if (!DaemonUtils.IsUrl(url))
                 {

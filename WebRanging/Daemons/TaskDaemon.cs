@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using WebRanging.Queue;
 
 namespace WebRanging.Daemons
 {
@@ -14,7 +15,8 @@ namespace WebRanging.Daemons
         private CancellationTokenSource cts;
         private Task task;
 
-        protected abstract Task ExecuteIteration(CancellationToken token);
+        protected abstract Task ExecuteIteration(QueueItem task, CancellationToken token);
+        protected abstract Task<QueueItem> GetTask();
 
         public void Run()
         {
@@ -24,7 +26,14 @@ namespace WebRanging.Daemons
             {
                 while (!token.IsCancellationRequested)
                 {
-                    await ExecuteIteration(token);
+                    var t = await GetTask();
+                    while (t == null && !token.IsCancellationRequested)
+                    {
+                        await Task.Delay(1000, token);
+                        t = await GetTask();
+                    }
+
+                    await ExecuteIteration(t, token);
                 }
             }, token);
         }
